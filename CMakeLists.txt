@@ -839,6 +839,8 @@ if(ENABLE_SCRIPTING)
 	add_subdirectory(src/script)
 endif()
 
+add_subdirectory(third-party/libdatachannel EXCLUDE_FROM_ALL)
+
 add_subdirectory(src/arm)
 add_subdirectory(src/core)
 add_subdirectory(src/gb)

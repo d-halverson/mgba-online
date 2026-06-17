@@ -1,0 +1,58 @@
+name: Windows Build
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Setup MSYS2
+      uses: msys2/setup-msys2@v2
+      with:
+        msystem: MINGW64
+        update: true
+        install: >-
+          mingw-w64-x86_64-gcc
+          mingw-w64-x86_64-cmake
+          mingw-w64-x86_64-ninja
+          mingw-w64-x86_64-qt5
+          mingw-w64-x86_64-SDL2
+          mingw-w64-x86_64-sqlite3
+          mingw-w64-x86_64-libzip
+          mingw-w64-x86_64-ffmpeg
+          mingw-w64-x86_64-pkgconf
+          make
+          git
+
+    - name: Configure CMake
+      run: |
+        mkdir build
+        cd build
+        cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release
+
+    - name: Build
+      run: |
+        cd build
+        ninja
+
+    - name: Package
+      run: |
+        cd build
+        cpack -G ZIP
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: mgba-windows-build
+        path: build/*.zip
