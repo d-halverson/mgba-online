@@ -1,12 +1,18 @@
-mGBA
+mGBA Online (Discord + WebRTC Fork)
 ====
+
+This is a fork of the excellent [mGBA](https://mgba.io/) emulator, modified to support seamless peer-to-peer multiplayer over the internet using Discord Lobbies and WebRTC.
+
+### Networking Features
+- **Zero Configuration:** No port forwarding or IP sharing required. Uses Google's public STUN servers to punch through NAT.
+- **Discord Integration:** Hosts a lobby directly on your Discord profile. Friends can simply click "Join Game" on your Discord profile to instantly connect.
+- **Low Latency:** Uses WebRTC DataChannels for unreliable, unordered UDP-style transport, ideal for cycle-accurate lockstep emulation.
+
+---
 
 mGBA is an emulator for running Game Boy Advance games. It aims to be faster and more accurate than many existing Game Boy Advance emulators, as well as adding features that other emulators lack. It also supports Game Boy and Game Boy Color games.
 
-Up-to-date news and downloads can be found at [mgba.io](https://mgba.io/).
-
-[![Build status](https://buildbot.mgba.io/badges/build-win32.svg)](https://buildbot.mgba.io)
-[![Translation status](https://hosted.weblate.org/widgets/mgba/-/svg-badge.svg)](https://hosted.weblate.org/engage/mgba)
+Up-to-date news and downloads for the official upstream project can be found at [mgba.io](https://mgba.io/).
 
 Features
 --------
