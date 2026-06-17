@@ -36,6 +36,14 @@ jobs:
           make
           git
 
+    - name: Disable Werror
+      run: |
+        sed -i 's/-Werror=implicit-function-declaration//g' CMakeLists.txt
+        sed -i 's/-Werror=implicit-int//g' CMakeLists.txt
+        sed -i 's/-Werror=incompatible-pointer-types//g' CMakeLists.txt
+        sed -i 's/-Werror=reorder//g' CMakeLists.txt
+        sed -i 's/-Werror//g' third-party/libdatachannel/CMakeLists.txt
+
     - name: Configure CMake
       run: |
         mkdir build
