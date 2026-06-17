@@ -19,6 +19,8 @@ if(BUILD_SDL)
 	include_directories(${SDL_INCLUDE_DIR} ${PROJECT_SOURCE_DIR}/src/platform/sdl)
 endif()
 
+include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${PROJECT_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/third-party/libdatachannel/include)
+
 if(POLICY CMP0071)
 	cmake_policy(SET CMP0071 NEW)
 endif()
@@ -152,6 +154,23 @@ set(SOURCE_FILES
 	MemoryView.cpp
 	MessagePainter.cpp
 	MultiplayerController.cpp
+	../../network/DiscordLobbyManager.cpp
+	../../network/WebRTCTransport.cpp
+	../../network/GBASIONetworkDriver.cpp
+	../../third-party/discord_game_sdk/cpp/achievement_manager.cpp
+	../../third-party/discord_game_sdk/cpp/activity_manager.cpp
+	../../third-party/discord_game_sdk/cpp/application_manager.cpp
+	../../third-party/discord_game_sdk/cpp/core.cpp
+	../../third-party/discord_game_sdk/cpp/image_manager.cpp
+	../../third-party/discord_game_sdk/cpp/lobby_manager.cpp
+	../../third-party/discord_game_sdk/cpp/network_manager.cpp
+	../../third-party/discord_game_sdk/cpp/overlay_manager.cpp
+	../../third-party/discord_game_sdk/cpp/relationship_manager.cpp
+	../../third-party/discord_game_sdk/cpp/storage_manager.cpp
+	../../third-party/discord_game_sdk/cpp/store_manager.cpp
+	../../third-party/discord_game_sdk/cpp/types.cpp
+	../../third-party/discord_game_sdk/cpp/user_manager.cpp
+	../../third-party/discord_game_sdk/cpp/voice_manager.cpp
 	ObjView.cpp
 	OpenGLBug.cpp
 	OverrideView.cpp
@@ -492,7 +511,7 @@ if(QT_STATIC)
 		list(APPEND QT_LIBRARIES ${QT}::FontDatabaseSupport ${QT}::XcbQpa ${QT}::QWaylandIntegrationPlugin)
 	endif()
 endif()
-target_link_libraries(${BINARY_NAME}-qt ${PLATFORM_LIBRARY} ${BINARY_NAME} ${QT_LIBRARIES})
+target_link_libraries(${BINARY_NAME}-qt ${PLATFORM_LIBRARY} ${BINARY_NAME} ${QT_LIBRARIES} datachannel ${PROJECT_SOURCE_DIR}/third-party/discord_game_sdk/lib/x86_64/discord_game_sdk.dll.lib)
 set(CPACK_DEBIAN_PACKAGE_DEPENDS "${CPACK_DEBIAN_PACKAGE_DEPENDS}" PARENT_SCOPE)
 
 if(UNIX AND NOT APPLE)
