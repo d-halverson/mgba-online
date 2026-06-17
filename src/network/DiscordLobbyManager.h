@@ -42,8 +42,8 @@ private:
     
     std::function<void(const std::string&)> sdpCallback;
 
-    // Placeholder Client ID
-    const int64_t CLIENT_ID = 1234567890123456789; 
+    // Real Discord Client ID
+    const int64_t CLIENT_ID = 1516933107578572892LL; 
 };
 
 #endif // DISCORD_LOBBY_MANAGER_H
