@@ -51,6 +51,7 @@
 #include "MemorySearch.h"
 #include "MemoryView.h"
 #include "MultiplayerController.h"
+#include "../../network/DiscordLobbyManager.h"
 #include "OverrideView.h"
 #include "ObjView.h"
 #include "PaletteView.h"
@@ -1445,6 +1446,12 @@ void Window::setupMenu(QMenuBar* menubar) {
 
 	m_actions.addSeparator("file");
 	m_multiWindow = m_actions.addAction(tr("New multiplayer window"), "multiWindow", GBAApp::app(), &GBAApp::newWindow, "file");
+	m_actions.addAction(tr("Host Discord Game"), "hostDiscord", []() {
+		DiscordLobbyManager::GetInstance().CreateLobby();
+	}, "file");
+	m_actions.addAction(tr("Join Discord Game"), "joinDiscord", []() {
+		// Usually handled automatically by the Discord SDK Activity join event
+	}, "file");
 
 #ifdef M_CORE_GBA
 	auto dolphin = m_actions.addAction(tr("Connect to Dolphin..."), "connectDolphin", openNamedTView<DolphinConnector>(&m_dolphinView, true, this), "file");
