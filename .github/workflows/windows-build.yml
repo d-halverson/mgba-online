@@ -31,6 +31,7 @@ jobs:
           mingw-w64-x86_64-sqlite3
           mingw-w64-x86_64-libzip
           mingw-w64-x86_64-ffmpeg
+          mingw-w64-x86_64-libepoxy
           mingw-w64-x86_64-pkgconf
           make
           git
