@@ -4,6 +4,8 @@
 #include <string>
 #include <functional>
 #include <memory>
+#include <thread>
+#include <atomic>
 #include "../../third-party/discord_game_sdk/cpp/discord.h"
 
 class DiscordLobbyManager {
@@ -41,6 +43,9 @@ private:
     int64_t currentLobbyId = 0;
     
     std::function<void(const std::string&)> sdpCallback;
+
+    std::thread callbackThread;
+    std::atomic<bool> running{false};
 
     // Real Discord Client ID
     const int64_t CLIENT_ID = 1516933107578572892LL; 

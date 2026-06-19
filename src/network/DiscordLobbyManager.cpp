@@ -4,6 +4,10 @@
 DiscordLobbyManager::DiscordLobbyManager() {}
 
 DiscordLobbyManager::~DiscordLobbyManager() {
+    running = false;
+    if (callbackThread.joinable()) {
+        callbackThread.join();
+    }
     if (core) {
         delete core;
         core = nullptr;
@@ -41,6 +45,14 @@ bool DiscordLobbyManager::Initialize() {
         }
     });
 
+    running = true;
+    callbackThread = std::thread([this]() {
+        while (running) {
+            RunCallbacks();
+            std::this_thread::sleep_for(std::chrono::milliseconds(16));
+        }
+    });
+
     return true;
 }
 
@@ -51,7 +63,11 @@ void DiscordLobbyManager::RunCallbacks() {
 }
 
 void DiscordLobbyManager::CreateLobby() {
-    if (!core) return;
+    if (!core) {
+        if (!Initialize()) {
+            return;
+        }
+    }
 
     discord::LobbyTransaction txn;
     txn.SetCapacity(2);
@@ -77,7 +93,11 @@ void DiscordLobbyManager::CreateLobby() {
 }
 
 void DiscordLobbyManager::JoinLobby(int64_t lobbyId, const std::string& secret) {
-    if (!core) return;
+    if (!core) {
+        if (!Initialize()) {
+            return;
+        }
+    }
 
     core->LobbyManager().ConnectLobby(lobbyId, secret.c_str(), [this](discord::Result result, discord::Lobby const& lobby) {
         if (result == discord::Result::Ok) {
