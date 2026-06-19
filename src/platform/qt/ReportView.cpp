@@ -79,7 +79,7 @@
 #endif
 
 #ifdef USE_LZMA
-#include <7zVersion.h>
+#include <third-party/lzma/7zVersion.h>
 #endif
 
 #ifdef BUILD_SDL

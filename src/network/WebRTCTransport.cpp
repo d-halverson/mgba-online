@@ -1,5 +1,6 @@
 #include "WebRTCTransport.h"
 #include <iostream>
+#include <cstddef>
 
 WebRTCTransport::WebRTCTransport() {
     rtc::InitLogger(rtc::LogLevel::Warning);
@@ -31,8 +32,8 @@ void WebRTCTransport::InitializeAsHost() {
 
     // We must create the datachannel before creating the offer
     rtc::DataChannelInit dcConfig;
-    dcConfig.ordered = false;    // Unordered for lowest latency (UDP-like)
-    dcConfig.maxRetransmits = 0; // Unreliable for lowest latency
+    dcConfig.reliability.unordered = true;      // Unordered for lowest latency (UDP-like)
+    dcConfig.reliability.maxRetransmits = 0;    // Unreliable for lowest latency
 
     dataChannel = peerConnection->createDataChannel("gba-link", dcConfig);
     SetupDataChannel();
@@ -76,9 +77,7 @@ void WebRTCTransport::SetupDataChannel() {
         if (onDataReceived) {
             onDataReceived(reinterpret_cast<const uint8_t*>(data.data()), data.size());
         }
-    });
-
-    dataChannel->onMessage([this](std::string msg) {
+    }, [this](std::string msg) {
         // We only expect binary messages for GBA link
     });
 
@@ -89,7 +88,7 @@ void WebRTCTransport::SetupDataChannel() {
 
 void WebRTCTransport::SendData(const uint8_t* data, size_t size) {
     if (dataChannel && dataChannel->isOpen()) {
-        rtc::binary bin(data, data + size);
+        rtc::binary bin(reinterpret_cast<const std::byte*>(data), reinterpret_cast<const std::byte*>(data) + size);
         dataChannel->send(bin);
     }
 }

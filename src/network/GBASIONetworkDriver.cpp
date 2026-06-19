@@ -76,7 +76,7 @@ static uint16_t NetworkDriverWriteSIOCNT(struct GBASIODriver* driver, uint16_t v
 }
 
 static bool NetworkDriverHandlesMode(struct GBASIODriver* driver, enum GBASIOMode mode) {
-    return mode == SIO_MULTIPLAYER;
+    return mode == GBA_SIO_MULTI;
 }
 
 void GBASIONetworkDriverCreate(struct GBASIONetworkDriver* netDriver, WebRTCTransport* transport, struct mCoreThread* thread) {

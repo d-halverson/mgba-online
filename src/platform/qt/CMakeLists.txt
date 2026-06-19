@@ -1,4 +1,4 @@
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -89,7 +89,7 @@ if(APPLE)
 endif()
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-declarations -Werror=narrowing")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-declarations")
 endif()
 
 get_target_property(QT_TYPE ${QT}::Core TYPE)
@@ -602,7 +602,7 @@ elseif(WIN32)
 	endif()
 	if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
 		find_program(BASH bash)
-		install(CODE "execute_process(COMMAND \"${BASH}\" \"${PROJECT_SOURCE_DIR}/tools/deploy-win.sh\" \"${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.exe\" \"\${CMAKE_INSTALL_PREFIX}\" \"\$ENV{PWD}\" WORKING_DIRECTORY \"${CMAKE_BINARY_DIR}\")" COMPONENT ${BINARY_NAME}-qt)
+		install(CODE "execute_process(COMMAND \"${BASH}\" \"${PROJECT_SOURCE_DIR}/tools/deploy-win.sh\" \"${CMAKE_BINARY_DIR}/${PROJECT_NAME}.exe\" \"\${CMAKE_INSTALL_PREFIX}\" \"\$ENV{PWD}\" WORKING_DIRECTORY \"${CMAKE_BINARY_DIR}\")" COMPONENT ${BINARY_NAME}-qt)
 	endif()
 	if(DISTBUILD)
 		file(WRITE "${CMAKE_BINARY_DIR}/portable.ini" "")

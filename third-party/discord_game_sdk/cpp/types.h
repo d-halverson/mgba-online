@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 #include "ffi.h"
 #include "event.h"
 #ifdef _WIN32
