@@ -479,6 +479,11 @@ if(WIN32)
 	if(NOT MSVC)
 		target_link_libraries(${BINARY_NAME}-qt -municode)
 	endif()
+	add_custom_command(TARGET ${BINARY_NAME}-qt POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different
+		"${PROJECT_SOURCE_DIR}/third-party/discord_game_sdk/lib/x86_64/discord_game_sdk.dll"
+		$<TARGET_FILE_DIR:${BINARY_NAME}-qt>
+	)
 endif()
 
 list(APPEND QT_LIBRARIES ${QT}::Widgets ${QT}::Network)
@@ -603,6 +608,7 @@ elseif(WIN32)
 	if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
 		find_program(BASH bash)
 		install(CODE "execute_process(COMMAND \"${BASH}\" \"${PROJECT_SOURCE_DIR}/tools/deploy-win.sh\" \"${CMAKE_BINARY_DIR}/${PROJECT_NAME}.exe\" \"\${CMAKE_INSTALL_PREFIX}\" \"\$ENV{PWD}\" WORKING_DIRECTORY \"${CMAKE_BINARY_DIR}\")" COMPONENT ${BINARY_NAME}-qt)
+		install(FILES "${PROJECT_SOURCE_DIR}/third-party/discord_game_sdk/lib/x86_64/discord_game_sdk.dll" DESTINATION "${CMAKE_INSTALL_BINDIR}" COMPONENT ${BINARY_NAME}-qt)
 	endif()
 	if(DISTBUILD)
 		file(WRITE "${CMAKE_BINARY_DIR}/portable.ini" "")
