@@ -21,6 +21,7 @@ elif [ -n $(which gdb 2>&1 | grep /gdb) ]; then
 else
 	echo "Please install gdb or ntldd for deploying DLLs"
 fi
+mkdir -p "$OUTDIR"
 cp -vu $DLLS "$OUTDIR"
 if [ -n $(which windeployqt 2>&1 | grep /windeployqt) ]; then
 	windeployqt --no-opengl-sw --no-svg --release --dir "$OUTDIR" "$BINARY"
