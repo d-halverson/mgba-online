@@ -18,6 +18,9 @@ bool DiscordLobbyManager::Initialize() {
     discord::Result result = discord::Core::Create(CLIENT_ID, DiscordCreateFlags_Default, &core);
     if (result != discord::Result::Ok) {
         std::cerr << "Failed to initialize Discord SDK. Error code: " << static_cast<int>(result) << std::endl;
+        if (lobbyErrorCallback) {
+            lobbyErrorCallback("Failed to connect to Discord. Make sure the Discord desktop app is running and logged in.");
+        }
         return false;
     }
     
@@ -85,9 +88,22 @@ void DiscordLobbyManager::CreateLobby() {
             activity.GetParty().SetId(std::to_string(lobby.GetId()).c_str());
             activity.GetSecrets().SetJoin(lobby.GetSecret());
             
-            core->ActivityManager().UpdateActivity(activity, [](discord::Result result) {
+            core->ActivityManager().UpdateActivity(activity, [this, lobby](discord::Result result) {
                 std::cout << "Activity updated: " << static_cast<int>(result) << std::endl;
+                if (result == discord::Result::Ok) {
+                    if (lobbyCreatedCallback) {
+                        lobbyCreatedCallback(lobby.GetId());
+                    }
+                } else {
+                    if (lobbyErrorCallback) {
+                        lobbyErrorCallback("Failed to update Discord Activity status.");
+                    }
+                }
             });
+        } else {
+            if (lobbyErrorCallback) {
+                lobbyErrorCallback("Failed to create Discord Lobby. Check your internet connection.");
+            }
         }
     });
 }

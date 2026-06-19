@@ -32,6 +32,14 @@ public:
         sdpCallback = callback;
     }
 
+    void SetLobbyCreatedCallback(std::function<void(int64_t)> callback) {
+        lobbyCreatedCallback = callback;
+    }
+
+    void SetLobbyErrorCallback(std::function<void(const std::string&)> callback) {
+        lobbyErrorCallback = callback;
+    }
+
     // Send our SDP string via Lobby Metadata
     void SendSDP(const std::string& sdpData);
 
@@ -43,6 +51,8 @@ private:
     int64_t currentLobbyId = 0;
     
     std::function<void(const std::string&)> sdpCallback;
+    std::function<void(int64_t)> lobbyCreatedCallback;
+    std::function<void(const std::string&)> lobbyErrorCallback;
 
     std::thread callbackThread;
     std::atomic<bool> running{false};

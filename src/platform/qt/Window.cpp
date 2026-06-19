@@ -1446,7 +1446,18 @@ void Window::setupMenu(QMenuBar* menubar) {
 
 	m_actions.addSeparator("file");
 	m_multiWindow = m_actions.addAction(tr("New multiplayer window"), "multiWindow", GBAApp::app(), &GBAApp::newWindow, "file");
-	m_actions.addAction(tr("Host Discord Game"), "hostDiscord", []() {
+	m_actions.addAction(tr("Host Discord Game"), "hostDiscord", [this]() {
+		DiscordLobbyManager::GetInstance().SetLobbyCreatedCallback([this](int64_t lobbyId) {
+			QMetaObject::invokeMethod(this, [this, lobbyId]() {
+				QMessageBox::information(this, tr("Discord Game Hosted"),
+					tr("Discord Lobby successfully created!\nLobby ID: %1\n\nYour Discord status has been updated. You can now invite friends via Discord.").arg(lobbyId));
+			}, Qt::QueuedConnection);
+		});
+		DiscordLobbyManager::GetInstance().SetLobbyErrorCallback([this](const std::string& error) {
+			QMetaObject::invokeMethod(this, [this, error]() {
+				QMessageBox::critical(this, tr("Discord Error"), QString::fromStdString(error));
+			}, Qt::QueuedConnection);
+		});
 		DiscordLobbyManager::GetInstance().CreateLobby();
 	}, "file");
 	m_actions.addAction(tr("Join Discord Game"), "joinDiscord", []() {
